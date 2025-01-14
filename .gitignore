@@ -1,3 +1,6 @@
 *.fasta
 *.xml
 *.json
+*.json.gz
+*.idea
+*.DS_Store
