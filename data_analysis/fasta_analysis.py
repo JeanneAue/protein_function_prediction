@@ -39,11 +39,13 @@ def analyze_and_visualize_fasta(file_path):
         "median_length": median_length,
         "shortest_sequence": {
             "id": sequences[shortest_idx].id,
+            "description": sequences[shortest_idx].description,
             "length": lengths[shortest_idx],
             "sequence": str(sequences[shortest_idx].seq),
         },
         "longest_sequence": {
             "id": sequences[longest_idx].id,
+            "description": sequences[longest_idx].description,
             "length": lengths[longest_idx],
             "sequence": str(sequences[longest_idx].seq),
         }
@@ -90,22 +92,21 @@ def visualize_sequence_lengths(lengths, stats):
 
 # Example usage
 if __name__ == "__main__":
-    fasta_file = "human_proteome.fasta"  # Replace with your file path
+    fasta_file = "../raw_data/uniprotkb_human_AND_model_organism_9606_2025_01_14.fasta"
     analysis = analyze_and_visualize_fasta(fasta_file)
     if analysis:
         print(analysis)
 
-fasta_file = "../raw_data/uniprotkb_human_AND_model_organism_9606_2025_01_14.fasta"
 
-# Parse the FASTA file
-content = SeqIO.parse(fasta_file, "fasta")
-sequences = []
-for record in content:
-    print(f"ID: {record.id}")
-    print(f"Description: {record.description}")
-    print(f"Sequence: {record.seq[:50]}...")
-    sequences.append(record.seq)
-    print(f"Sequence length: {len(record.seq)}")
-
-print(f"Total length: {len(sequences)}")
-print(f"Median length of sequence: {np.median(sequences)}")
+# # Parse the FASTA file
+# content = SeqIO.parse(fasta_file, "fasta")
+# sequences = []
+# for record in content:
+#     print(f"ID: {record.id}")
+#     print(f"Description: {record.description}")
+#     print(f"Sequence: {record.seq[:50]}...")
+#     sequences.append(record.seq)
+#     print(f"Sequence length: {len(record.seq)}")
+#
+# print(f"Total length: {len(sequences)}")
+# print(f"Median length of sequence: {np.median(sequences)}")
