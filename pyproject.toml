@@ -14,7 +14,11 @@ matplotlib = "^3.10.0"
 torch = "^2.5.1"
 transformers = "^4.48.0"
 peft = "^0.14.0"
+numpy = "^2.2.1"
 
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^6.29.5"
 
 [build-system]
 requires = ["poetry-core"]
