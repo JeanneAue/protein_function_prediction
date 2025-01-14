@@ -54,3 +54,25 @@
   - Models used (e.g., deep learning vs traditional ML).
   - Embedding techniques.
 
+
+# Data cleaning
+
+How is our data structured
+
+* Basically everything is inside of a `results` array. This array ontains objects which are the entries each starting with entryType.
+* For each entry there is a `uniProtKBCrossReference` key we want to keep an entry if inside in one of the `properties` fields there is an object with
+
+```json
+"properties": [
+{
+  "key": "GoTerm",
+  "value": "F:xxxxx"
+},{
+}
+]
+```
+
+* What we want to remove on the level of `entryType` and `uniProtKBCrossReference`
+  * entryAudit
+  * organism
+  * references
