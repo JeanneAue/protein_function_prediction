@@ -6,3 +6,13 @@ The raw_data folder should contain 3 files:
 - ...
 
 Download available at: https://www.uniprot.org/uniprotkb?query=human&facets=model_organism:9606,reviewed:true
+
+
+GO-term quick view: https://www.ebi.ac.uk/QuickGO/annotations?geneProductId=P01308
+
+## Fragen:
+- embeddings/padding -> "PAD" padding in Ordung oder manuell über BED files erstellen (wenn ja woher?)
+- welche Infos pro Protein sollen wir sinnvollerweise speichern? (aktuell F:...)
+- welche Plots/Infos sollen wir bei der Analyse den Fokus drauf legen?
+- vorhersage auch für hierarchie der GO terms oder nur konkrete GO terms
+  - in den Rohdaten haben wir mehrere Funktionen
