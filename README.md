@@ -12,7 +12,16 @@ GO-term quick view: https://www.ebi.ac.uk/QuickGO/annotations?geneProductId=P013
 
 ## Fragen:
 - embeddings/padding -> "PAD" padding in Ordung oder manuell über BED files erstellen (wenn ja woher?)
-- welche Infos pro Protein sollen wir sinnvollerweise speichern? (aktuell F:...)
+  - Antwort: PAD reicht!!
+  - TODO: model.eval ?
+  - TODO: batching
+- -welche Infos pro Protein sollen wir sinnvollerweise speichern? (aktuell F:...)-
 - welche Plots/Infos sollen wir bei der Analyse den Fokus drauf legen?
+  - verteilung mit allen hierarchien
+  - das war die Verteilung, so haben wir entschieden, wo wir den cutoff machen
+  - wie groß sind embeddings (jeweils für batching!!)
 - vorhersage auch für hierarchie der GO terms oder nur konkrete GO terms
   - in den Rohdaten haben wir mehrere Funktionen
+- embeddings: nicht zu viel Zeit drauf verwenden (es gibt nicht so viele Cluster, weil zu hochdimensional)
+  - auf jeden Fall mal plotten
+  - andere Formen für Analyse
