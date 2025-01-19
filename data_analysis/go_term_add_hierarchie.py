@@ -83,8 +83,8 @@ def add_go_hierarchy_to_proteins(input_file, output_file, obo_file):
 
 
 # Example usage
-input_file = "./../raw_data/filtered_proteins_with_GO_ids.json"  # Replace with your input file path
-output_file = "./../raw_data/proteins_with_complete_go_hierarchy.json"  # Replace with your desired output file path
+input_file = "./../prediction/protein_embeddings_with_go_ids.json"  # Replace with your input file path
+output_file = "./../prediction/protein_data_with_embeddings_and_hierarchie.json"  # Replace with your desired output file path
 obo_file = "./go-basic.obo"  # Path to the OBO file
 
 add_go_hierarchy_to_proteins(input_file, output_file, obo_file)
