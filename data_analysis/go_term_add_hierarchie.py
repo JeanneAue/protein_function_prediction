@@ -60,20 +60,44 @@ def add_go_hierarchy_to_proteins(input_file, output_file, obo_file):
     with open(input_file, 'r') as f:
         proteins = json.load(f)
 
+    def build_hierarchy(go_id, visited):
+        """Recursively build a consistent GO term hierarchy."""
+        if go_id in visited:
+            return None  # Avoid circular references
+        visited.add(go_id)
+
+        term = go_terms.get(go_id)
+        if not term:
+            return None
+
+        return {
+            "id": go_id,
+            "name": term.get("name", ""),
+            "namespace": term.get("namespace", ""),
+            "parents": [
+                build_hierarchy(parent_id, visited)
+                for parent_id in term.get("parents", [])
+                if parent_id in go_terms
+            ]
+        }
+
     for protein in proteins:
-        # Check if the protein has GO annotations
         if "go_annotations_with_ids" in protein and protein["go_annotations_with_ids"]:
-            protein["go_hierarchies"] = {}
+            # Restructure hierarchies as a list of top-level terms
+            protein["go_hierarchies"] = []
             for go_annotation in protein["go_annotations_with_ids"]:
-                # Extract the GO term name (everything after the first colon)
-                go_term_name = go_annotation["name"]
                 go_id = go_annotation["id"]
 
                 if go_id:
-                    print(f"Processing GO term: {go_term_name} (ID: {go_id})")
-                    hierarchy = get_hierarchy(go_terms, go_id, cached_hierarchies)
+                    print(f"Processing GO term: {go_id}")
+
+                    # Check cache first to avoid recomputation
+                    if go_id not in cached_hierarchies:
+                        cached_hierarchies[go_id] = build_hierarchy(go_id, set())
+
+                    hierarchy = cached_hierarchies[go_id]
                     if hierarchy:
-                        protein["go_hierarchies"][go_term_name] = hierarchy
+                        protein["go_hierarchies"].append(hierarchy)
 
     # Save the updated proteins to a new JSON file
     with open(output_file, 'w') as f:
@@ -83,8 +107,8 @@ def add_go_hierarchy_to_proteins(input_file, output_file, obo_file):
 
 
 # Example usage
-input_file = "./../prediction/protein_embeddings_with_go_ids.json"  # Replace with your input file path
-output_file = "./../prediction/protein_data_with_embeddings_and_hierarchie.json"  # Replace with your desired output file path
+input_file = "../embeddings/protein_embeddings_with_go_ids.json"  # Replace with your input file path
+output_file = "../embeddings/protein_data_with_embeddings_and_hierarchy.json"  # Replace with your desired output file path
 obo_file = "./go-basic.obo"  # Path to the OBO file
 
 add_go_hierarchy_to_proteins(input_file, output_file, obo_file)
