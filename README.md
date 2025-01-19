@@ -29,4 +29,4 @@ GO-term quick view: https://www.ebi.ac.uk/QuickGO/annotations?geneProductId=P013
 
 ## Decisions
 - filtered to only use proteins that have at least one F:... GO-Term
-- batching with size 16
+- batching with size 4 (because of out of memory error on cluster)
