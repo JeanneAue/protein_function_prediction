@@ -3,13 +3,10 @@ import numpy as np
 import os
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MultiLabelBinarizer
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.svm import SVC
-from sklearn.ensemble import GradientBoostingClassifier
-from sklearn.metrics import classification_report, hamming_loss
 from sklearn.multioutput import MultiOutputClassifier
+from sklearn.svm import SVC
+from sklearn.metrics import classification_report, hamming_loss
 import joblib
-
 
 def get_parents(term_id, hierarchy):
     parents_of_term = set()
@@ -29,15 +26,11 @@ def get_parents(term_id, hierarchy):
 def extract_go_parents_recursive(go_hierarchies, term_id, collected_parents=None):
     if collected_parents is None:
         collected_parents = set()
-
     collected_parents.add(term_id)
-
     parent_ids = get_parents(term_id, go_hierarchies)
-
     for parent_id in parent_ids:
         if parent_id and parent_id not in collected_parents:
             extract_go_parents_recursive(go_hierarchies, parent_id, collected_parents)
-
     return collected_parents
 
 def save_checkpoint(model, mlb, filename="checkpoint.pkl"):
@@ -53,12 +46,13 @@ def load_checkpoint(filename="checkpoint.pkl"):
         return checkpoint["model"], checkpoint["mlb"]
     return None, None
 
-# Load data
-with open("./protein_data_with_embeddings_and_hierarchy.json", "r") as infile:
+
+with open("protein_data_with_embeddings_and_hierarchy.json", "r") as infile:
     data = json.load(infile)
 
-X = np.array([entry["embedding"] for entry in data])  # Embeddings
-y_raw = []  # Multi-label targets
+X = np.array([entry["embedding"] for entry in data])
+y_raw = []
+
 
 print("Processing annotations and hierarchies...")
 for entry in data:
@@ -72,9 +66,24 @@ for entry in data:
 mlb = MultiLabelBinarizer()
 y = mlb.fit_transform(y_raw)
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
 
-# Check if a checkpoint exists
+# Identify and filter out columns with only one class in the training set
+non_constant_columns = []
+for i in range(y_train.shape[1]):
+    unique_vals = np.unique(y_train[:, i])
+    if len(unique_vals) > 1:  # means there's both 0 and 1
+        non_constant_columns.append(i)
+
+non_constant_columns = np.array(non_constant_columns)
+if len(non_constant_columns) == 0:
+    raise ValueError("All labels have only one class in the training set.")
+
+y_train_filtered = y_train[:, non_constant_columns]
+y_test_filtered = y_test[:, non_constant_columns]
+
 classifier, mlb_checkpoint = load_checkpoint()
 if classifier is None:
     print("No checkpoint found. Starting fresh...")
@@ -83,31 +92,30 @@ if classifier is None:
 else:
     print("Resuming training from checkpoint...")
 
-# Train the classifier
 try:
     print("Training the classifier...")
-    classifier.fit(X_train, y_train)
+    classifier.fit(X_train, y_train_filtered)
     print("Training completed.")
 
-    # Save checkpoint after training
-    save_checkpoint(classifier, mlb, filename="protein_function_checkpoint.pkl")
+    # Save checkpoint
+    save_checkpoint(classifier, mlb, filename="svm_protein_function_checkpoint.pkl")
 
     print("Evaluating the classifier...")
-    y_pred = classifier.predict(X_test)
+    y_pred_filtered = classifier.predict(X_test)
+    used_label_names = [mlb.classes_[i] for i in non_constant_columns]
 
-    print("Classification Report:")
-    print(classification_report(y_test, y_pred, target_names=mlb.classes_))
+    print("Classification Report (for non-constant labels only):")
+    print(classification_report(y_test_filtered, y_pred_filtered, target_names=used_label_names))
 
-    print("Hamming Loss:", hamming_loss(y_test, y_pred))
+    print("Hamming Loss:", hamming_loss(y_test_filtered, y_pred_filtered))
 
-    # Save final model
-    joblib.dump(classifier, "protein_function_classifier_with_hierarchy.pkl")
-    joblib.dump(mlb, "go_mlb_with_hierarchy.pkl")
+    joblib.dump(classifier, "svm_protein_function_classifier_with_hierarchy.pkl")
+    joblib.dump(mlb, "svm_go_mlb_with_hierarchy.pkl")
     print("Model and label binarizer saved.")
 
 except KeyboardInterrupt:
     print("Training interrupted. Saving checkpoint...")
-    save_checkpoint(classifier, mlb, filename="protein_function_checkpoint.pkl")
+    save_checkpoint(classifier, mlb, filename="svm_protein_function_checkpoint.pkl")
 except Exception as e:
     print(f"An error occurred: {e}. Saving checkpoint...")
-    save_checkpoint(classifier, mlb, filename="protein_function_checkpoint.pkl")
+    save_checkpoint(classifier, mlb, filename="svm_protein_function_checkpoint.pkl")
