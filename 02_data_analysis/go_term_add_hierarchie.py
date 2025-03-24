@@ -99,7 +99,6 @@ def add_go_hierarchy_to_proteins(input_file, output_file, obo_file):
                     if hierarchy:
                         protein["go_hierarchies"].append(hierarchy)
 
-    # Save the updated proteins to a new JSON file
     with open(output_file, 'w') as f:
         json.dump(proteins, f, indent=4)
 
@@ -107,8 +106,8 @@ def add_go_hierarchy_to_proteins(input_file, output_file, obo_file):
 
 
 # Example usage
-input_file = "../embeddings/protein_embeddings_with_go_ids.json"  # Replace with your input file path
-output_file = "../embeddings/protein_data_with_embeddings_and_hierarchy.json"  # Replace with your desired output file path
-obo_file = "./go-basic.obo"  # Path to the OBO file
+input_file = "../embeddings/protein_embeddings_with_go_ids.json"
+output_file = "../embeddings/protein_data_with_embeddings_and_hierarchy.json"
+obo_file = "./go-basic.obo"
 
 add_go_hierarchy_to_proteins(input_file, output_file, obo_file)

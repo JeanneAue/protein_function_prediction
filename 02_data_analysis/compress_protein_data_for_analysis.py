@@ -4,7 +4,7 @@ from prediction.debug import go_hierarchies
 
 
 # not tested
-def filter_proteins_by_parent_go_terms(input_file, output_file, obo_file, max_parents=6000):
+def filter_proteins_by_parent_go_terms(input_file, output_file, obo_file):
     """
     Creates a new JSON file including only a specified number of parent GO terms
     for each protein. The output includes only GO term IDs in the "go_annotations" field.
@@ -13,7 +13,6 @@ def filter_proteins_by_parent_go_terms(input_file, output_file, obo_file, max_pa
         input_file (str): Path to the input JSON file containing protein data.
         output_file (str): Path to the output JSON file with filtered GO annotations.
         obo_file (str): Path to the GO-basic OBO file.
-        max_parents (int): Maximum number of parent GO terms to include for each annotation.
     """
     # Load GO terms and create mapping
     go_terms, _ = parse_obo_file(obo_file)
@@ -82,9 +81,8 @@ def filter_proteins_by_parent_go_terms(input_file, output_file, obo_file, max_pa
 
 
 # Example usage
-input_file = "../embeddings/protein_data_with_embeddings_and_hierarchy.json"  # Replace with your input file path
-output_file = "../embeddings/compressed_protein_data.json"  # Replace with your desired output file path
-obo_file = "./go-basic.obo"  # Path to the OBO file
-max_parents = 5  # Specify the maximum number of parent GO terms to include
+input_file = "../embeddings/protein_data_with_embeddings_and_hierarchy.json"
+output_file = "../embeddings/compressed_protein_data.json"
+obo_file = "./go-basic.obo"
 
 filter_proteins_by_parent_go_terms(input_file, output_file, obo_file)

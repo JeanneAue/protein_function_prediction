@@ -5,7 +5,7 @@ def download_file(url, filename):
     """Downloads a file from a URL and saves it to the specified filename."""
     try:
         response = requests.get(url, stream=True)
-        response.raise_for_status()  # Raise an exception for bad status codes
+        response.raise_for_status()
 
         with open(filename, 'wb') as f:
             for chunk in response.iter_content(chunk_size=8192):
