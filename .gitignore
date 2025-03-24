@@ -1,10 +1,10 @@
 *.idea
 *.DS_Store
 
-raw_data/uniprotkb_human_AND_model_organism_9606_2025_01_14.json
-raw_data/uniprotkb_human_AND_model_organism_9606_2025_01_14.xml
-raw_data/uniprotkb_human_AND_model_organism_9606_2025_01_14.fasta
-raw_data/uniprotkb_proteome_UP000005640_AND_revi_2025_01_14.json
+01_raw_data/uniprotkb_human_AND_model_organism_9606_2025_01_14.json
+01_raw_data/uniprotkb_human_AND_model_organism_9606_2025_01_14.xml
+01_raw_data/uniprotkb_human_AND_model_organism_9606_2025_01_14.fasta
+01_raw_data/uniprotkb_proteome_UP000005640_AND_revi_2025_01_14.json
 *.json
 *.pyc
 

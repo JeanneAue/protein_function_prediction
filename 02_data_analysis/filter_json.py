@@ -72,7 +72,7 @@ def filter_proteins_with_go_ids(input_file, output_file, name_to_id):
 
 
 # Example usage
-input_file = "./../raw_data/parsed_proteins.json"  # Replace with your input file path
-output_file = "./../raw_data/filtered_proteins.json"
-output_file_2 = "./../raw_data/filtered_proteins_with_GO_ids.json"
+input_file = "../01_raw_data/cleaned_raw_data/parsed_proteins.json"  # Replace with your input file path
+output_file = "../01_raw_data/cleaned_raw_data/filtered_proteins.json"
+output_file_2 = "../01_raw_data/cleaned_raw_data/filtered_proteins_with_GO_ids.json"
 filter_proteins_with_go_ids(output_file, output_file_2, name_to_id)

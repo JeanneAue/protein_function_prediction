@@ -33,9 +33,12 @@ def extract_go_parents_recursive(go_hierarchies, term_id, collected_parents=None
             extract_go_parents_recursive(go_hierarchies, parent_id, collected_parents)
     return collected_parents
 
-def save_checkpoint(model, mlb, filename="checkpoint.pkl"):
+def save_checkpoint(model, mlb, non_constant_columns, excluded_terms, filename="checkpoint.pkl"):
     print(f"Saving checkpoint to {filename}...")
-    joblib.dump({"model": model, "mlb": mlb}, filename)
+    joblib.dump(
+        {"model": model, "mlb": mlb, "non_constant_columns": non_constant_columns, "excluded_terms": excluded_terms},
+        filename
+    )
     print("Checkpoint saved.")
 
 def load_checkpoint(filename="checkpoint.pkl"):
@@ -43,8 +46,8 @@ def load_checkpoint(filename="checkpoint.pkl"):
         print(f"Loading checkpoint from {filename}...")
         checkpoint = joblib.load(filename)
         print("Checkpoint loaded.")
-        return checkpoint["model"], checkpoint["mlb"]
-    return None, None
+        return checkpoint["model"], checkpoint["mlb"], checkpoint["non_constant_columns"]
+    return None, None, None
 
 
 with open("protein_data_with_embeddings_and_hierarchy.json", "r") as infile:
@@ -69,11 +72,10 @@ X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42
 )
 
-# Identify and filter out columns with only one class in the training set
 non_constant_columns = []
 for i in range(y_train.shape[1]):
     unique_vals = np.unique(y_train[:, i])
-    if len(unique_vals) > 1:  # means there's both 0 and 1
+    if len(unique_vals) > 1:
         non_constant_columns.append(i)
 
 non_constant_columns = np.array(non_constant_columns)
@@ -83,8 +85,12 @@ if len(non_constant_columns) == 0:
 y_train_filtered = y_train[:, non_constant_columns]
 y_test_filtered = y_test[:, non_constant_columns]
 
+# Identify excluded GO terms
+all_terms = set(range(len(mlb.classes_)))  # Indices of all GO terms in the MultiLabelBinarizer
+excluded_columns = all_terms - set(non_constant_columns)  # Columns that are ignored
+excluded_terms = [mlb.classes_[i] for i in excluded_columns]  # Map to GO term IDs
 
-classifier, mlb_checkpoint = load_checkpoint()
+classifier, mlb_checkpoint, saved_columns = load_checkpoint()
 if classifier is None:
     print("No checkpoint found. Starting fresh...")
     base_model = XGBClassifier(
@@ -95,15 +101,14 @@ if classifier is None:
     classifier = MultiOutputClassifier(base_model)
 else:
     print("Resuming training from checkpoint...")
+    # Validate embedding consistency here if needed
 
 try:
     print("Training the classifier...")
     classifier.fit(X_train, y_train_filtered)
     print("Training completed.")
 
-    # Save checkpoint
-    save_checkpoint(classifier, mlb, filename="xgboost_protein_function_checkpoint.pkl")
-
+    save_checkpoint(classifier, mlb, non_constant_columns, excluded_terms=excluded_terms,filename="xgboost_protein_function_checkpoint.pkl")
 
     print("Evaluating the classifier...")
     y_pred_filtered = classifier.predict(X_test)
@@ -120,7 +125,7 @@ try:
 
 except KeyboardInterrupt:
     print("Training interrupted. Saving checkpoint...")
-    save_checkpoint(classifier, mlb, filename="xgboost_protein_function_checkpoint.pkl")
+    save_checkpoint(classifier, mlb, non_constant_columns, excluded_terms=excluded_terms,filename="xgboost_protein_function_checkpoint.pkl")
 except Exception as e:
     print(f"An error occurred: {e}. Saving checkpoint...")
-    save_checkpoint(classifier, mlb, filename="xgboost_protein_function_checkpoint.pkl")
+    save_checkpoint(classifier, mlb, non_constant_columns, excluded_terms=excluded_terms,filename="xgboost_protein_function_checkpoint.pkl")

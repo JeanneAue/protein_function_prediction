@@ -41,9 +41,8 @@ if __name__ == "__main__":
     # with open("example_input.json", "r", encoding="utf-8") as f:
     #     input_data = json.load(f)
 
-    # For demonstration, we'll use the snippet from your question as 'input_data'.
     # Load JSON files
-    file_name = 'raw_data/uniprotkb_human_AND_model_organism_9606_2025_01_14.json'
+    file_name = '01_raw_data/uniprotkb_human_AND_model_organism_9606_2025_01_14.json'
     with open(file_name, 'r', encoding="utf-8") as f1:
             input_data = json.load(f1)
 
@@ -51,7 +50,7 @@ if __name__ == "__main__":
     cleaned_data = clean_uniprot_json(input_data)
 
     # 3) Print or write out the cleaned JSON
-    output_file = "raw_data/cleaned_uniprot_data.json"
+    output_file = "01_raw_data/cleaned_uniprot_data.json"
     with open(output_file, "w", encoding="utf-8") as outfile:
         json.dump(cleaned_data, outfile, indent=2)
 

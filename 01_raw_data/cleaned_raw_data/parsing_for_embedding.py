@@ -1,6 +1,6 @@
 import json
 
-with open('./cleaned_uniprot_data.json', 'r') as file:
+with open('cleaned_uniprot_data.json', 'r') as file:
     data = json.load(file)
 
 parsed_data = []
@@ -24,7 +24,7 @@ for entry in data.get("results", []):
         "go_annotations": go_annotations
     })
 
-print(json.dumps(parsed_data, indent=4))
+#print(json.dumps(parsed_data, indent=4))
 
 with open('parsed_proteins.json', 'w') as outfile:
     json.dump(parsed_data, outfile, indent=4)

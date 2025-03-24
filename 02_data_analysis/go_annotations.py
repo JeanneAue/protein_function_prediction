@@ -194,7 +194,7 @@ def GO_term_cooccurrence_heatmap_with_diagonal(json_data, top_n=20):
 
 if __name__ == '__main__':
 
-    json_file = "./../raw_data/cleaned_uniprot_data.json"
+    json_file = "../01_raw_data/cleaned_raw_data/cleaned_uniprot_data.json"
     with open(json_file) as f:
         json_data = json.load(f)
         #GO_term_distribution_top_n(json_data, top_n=400)

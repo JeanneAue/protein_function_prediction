@@ -44,4 +44,4 @@ def compare_json_files(file1, file2, char_limit=100000000):
 
 # Usage example
 # Replace 'file1.json' and 'file2.json' with the paths to your JSON files
-compare_json_files('raw_data/uniprotkb_human_AND_model_organism_9606_2025_01_14.json', 'raw_data/uniprotkb_proteome_UP000005640_AND_revi_2025_01_14.json')
+compare_json_files('01_raw_data/uniprotkb_human_AND_model_organism_9606_2025_01_14.json', '01_raw_data/uniprotkb_proteome_UP000005640_AND_revi_2025_01_14.json')
