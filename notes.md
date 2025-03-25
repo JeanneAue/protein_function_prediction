@@ -1,4 +1,3 @@
-# Results
 ### Distribution of GO Terms
 Top 40 GO Terms overall occurences
 ![top40GOTerms.png](result_plots/top40GOTerms.png)

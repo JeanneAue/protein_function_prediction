@@ -106,8 +106,8 @@ def add_go_hierarchy_to_proteins(input_file, output_file, obo_file):
 
 
 # Example usage
-input_file = "../embeddings/protein_embeddings_with_go_ids.json"
-output_file = "../embeddings/protein_data_with_embeddings_and_hierarchy.json"
+input_file = "../03_embeddings/protein_embeddings_with_go_ids.json"
+output_file = "../03_embeddings/protein_data_with_embeddings_and_hierarchy.json"
 obo_file = "./go-basic.obo"
 
 add_go_hierarchy_to_proteins(input_file, output_file, obo_file)

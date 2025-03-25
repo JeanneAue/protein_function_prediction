@@ -81,8 +81,8 @@ def filter_proteins_by_parent_go_terms(input_file, output_file, obo_file):
 
 
 # Example usage
-input_file = "../embeddings/protein_data_with_embeddings_and_hierarchy.json"
-output_file = "../embeddings/compressed_protein_data.json"
+input_file = "../03_embeddings/protein_data_with_embeddings_and_hierarchy.json"
+output_file = "../03_embeddings/compressed_protein_data.json"
 obo_file = "./go-basic.obo"
 
 filter_proteins_by_parent_go_terms(input_file, output_file, obo_file)
