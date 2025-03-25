@@ -36,7 +36,8 @@ def generate_embedding(sequences, batch_size=8):
 
     return np.vstack(all_embeddings)
 
-with open("parsed_proteins.json", "r") as infile:
+with open("../01_raw_data/cleaned_raw_data/parsed_proteins.json", "r") as infile:
+
     parsed_data = json.load(infile)
 
 sequences = [entry["sequence"] for entry in parsed_data]

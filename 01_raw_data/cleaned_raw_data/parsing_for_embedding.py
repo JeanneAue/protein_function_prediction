@@ -28,3 +28,5 @@ for entry in data.get("results", []):
 
 with open('parsed_proteins.json', 'w') as outfile:
     json.dump(parsed_data, outfile, indent=4)
+
+print(f"Data saved to parsed_proteins.json")
