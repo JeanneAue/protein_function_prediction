@@ -28,7 +28,8 @@ GOA - Gene Ontology Annotation: https://www.ebi.ac.uk/GOA/
 
    c) `04_prediction/support_vector_machine_cluster.py`
 2. Execute the model on the cluster node
-Troubleshooting: Look at the logs in reports folder
+
+Troubleshooting: Look at the logs in reports folder for library versions and configurations.
 
 ## Inference
 Try out the notebooks in `05_inference`
